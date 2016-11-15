@@ -21,7 +21,7 @@ function getPage (id, page) {
 		dataType: 'json'
 	}).success(function(data){
 		if (data.length===0) {
-			caption.text('搜索到 ' + all.length + ' 条记录,点击串号跳转。');
+			caption.text('搜索到 ' + all.length + ' 条记录，点击串号跳转。');
 			searchBar.prop('disabled', false);
 			btnSearch.removeClass('disabled');
 		} else {
@@ -40,7 +40,7 @@ function getPage (id, page) {
 			getPage(id, page + 1);
 		}
 	}).error(function() {
-		caption.text('搜索到 ' + all.length + ' 条记录,点击串号跳转。');
+		caption.text('搜索到 ' + all.length + ' 条记录，点击串号跳转。');
 		searchBar.prop('disabled', false);
 		btnSearch.removeClass('disabled');
 	});
