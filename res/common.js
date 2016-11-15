@@ -1,46 +1,62 @@
-function search(id){
-	$('.search-bar input[type=text]').prop('disabled', true);
-	$('.btn-search').addClass('disabled');
-	$('.table-result>caption').text('搜索中...');
-	$('.table-result>tbody').html('');
-	var result = $.ajax({
-		url: 'api.php?id=' + id,
+var
+	all = [],
+	btnSearch = $('.btn-search'),
+	searchBar = $('.search-bar input[type=text]'),
+	caption = $('.table-result>caption'),
+	tbody = $('.table-result>tbody');
+function mergeSort (arr1,arr2){
+	var arr = arr1.slice();
+	for(var i=0;i<arr2.length;i++){
+		arr.indexOf(arr2[i]) === -1 ? arr.push(arr2[i]) : 0;
+	}
+	arr.sort(function(a, b){
+		return b - a;
+	});
+	return arr;
+}
+function getPage (id, page) {
+	caption.text('正在搜索第' + page + '页记录...');
+	$.ajax({
+		url: 'api.php?id=' + id + '&page=' + page,
 		dataType: 'json'
 	}).success(function(data){
-		$('.table-result>caption').text('搜索到：' + data.length + ' 条记录，点击串号跳转。');
-		data.sort(function(x, y){
-			x = parseInt(x);
-			y = parseInt(y);
-			if (x < y) {
-				return 1;
-			}
-			if (x > y) {
-				return -1;
-			}
-			return 0;
-		});
-		data.forEach(function(tid){
-			var tr = '<tr>';
-			tr += '<td><a href="https://h.nimingban.com/t/'+tid+'">';
-			tr += 'No.' + tid + '</a>';
-			tr += '</td><td>';
-			tr += '<a href="https://h.nimingban.com/t/' + tid + '">跳转</a> ';
-			tr += '<a target="_blank" href="https://h.nimingban.com/t/' + tid + '">新窗口</a>';
-			tr += '</td></tr>';
-			$(tr).appendTo('.table-result>tbody');
-		});
+		if (data.length===0) {
+			caption.text('搜索到 ' + all.length + ' 条记录,点击串号跳转。');
+			searchBar.prop('disabled', false);
+			btnSearch.removeClass('disabled');
+		} else {
+			tbody.html('');
+			all = mergeSort(all, data);
+			all.forEach(function(tid){
+				var tr = '<tr>';
+				tr += '<td><a href="https://h.nimingban.com/t/'+tid+'">';
+				tr += 'No.' + tid + '</a>';
+				tr += '</td><td>';
+				tr += '<a href="https://h.nimingban.com/t/' + tid + '">跳转</a> ';
+				tr += '<a target="_blank" href="https://h.nimingban.com/t/' + tid + '">新窗口</a>';
+				tr += '</td></tr>';
+				$(tr).appendTo(tbody);
+			});
+			getPage(id, page + 1);
+		}
 	}).error(function() {
-		$('.table-result>caption').text('搜索到：0 条记录。');
-	}).done(function(){
-		$('.search-bar input[type=text]').prop('disabled', false);
-		$('.btn-search').removeClass('disabled');
+		caption.text('搜索到 ' + all.length + ' 条记录,点击串号跳转。');
+		searchBar.prop('disabled', false);
+		btnSearch.removeClass('disabled');
 	});
 }
-$('.btn-search').click(function(e){
-	var id = $('.search-bar input[type=text]').val();
-	id&&search(id);
+function start (id) {
+	all = [];
+	searchBar.prop('disabled', true);
+	btnSearch.addClass('disabled');
+	tbody.html('');
+	getPage(id, 1);
+}
+btnSearch.click(function(e){
+	var id = searchBar.val();
+	id&&start(id);
 	e.preventDefault();
 });
-$('.search-bar input[type=text]').keydown(function(e){
-	e.keyCode===13&&$('.btn-search').click();
+searchBar.keydown(function(e){
+	e.keyCode===13&&btnSearch.click();
 });
