@@ -2,12 +2,12 @@
 if (empty($_GET['id'])||empty($_GET['page'])) {
 	exit();
 } else {
-	$id = urlencode($_GET['id']);
+	$id = $_GET['id'];
 	$page = (int)$_GET['page'];
 }
 set_time_limit(0);
-$query_url = 'https://www.google.com/search?q=site:h.nimingban.com+'.$id.'&num=20';
-$re1 = '|<cite.*?h.nimingban.com(?:/m)?/t/(\d+)\S*?</cite>|';
+$query_url = 'https://www.google.com/search?q=site:h.nimingban.com+inurl:/t/+'.$id.'&num=20&filter=0';
+$re1 = '|<cite.*?h.nimingban.com/\S+?/(\d+)\S*?</cite>|';
 $re2 = '|<cite.*?h.nimingban.com\S*?</cite>|';
 
 /* 函数定义开始 */
