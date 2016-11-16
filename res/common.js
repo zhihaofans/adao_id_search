@@ -14,10 +14,18 @@ function mergeSort (arr1,arr2){
 	});
 	return arr;
 }
-function getPage (id, page) {
+function getPage (id, page, use) {
 	caption.text('正在搜索第' + page + '页记录...');
+	switch(use){
+		case '360':
+			var url = 'api.php?id=' + id + '&page=' + page;
+			break;
+		case 'google':
+			var url = 'api_g.php?id=' + id + '&page=' + page;
+			break;
+	}
 	$.ajax({
-		url: 'api.php?id=' + id + '&page=' + page,
+		url: url,
 		dataType: 'json'
 	}).success(function(data){
 		if (data.length===0) {
@@ -37,7 +45,7 @@ function getPage (id, page) {
 				tr += '</td></tr>';
 				$(tr).appendTo(tbody);
 			});
-			getPage(id, page + 1);
+			getPage(id, page + 1, use);
 		}
 	}).error(function() {
 		caption.text('搜索到 ' + all.length + ' 条记录，点击串号跳转。');
@@ -50,7 +58,7 @@ function start (id) {
 	searchBar.prop('disabled', true);
 	btnSearch.addClass('disabled');
 	tbody.html('');
-	getPage(id, 1);
+	getPage(id, 1, $('input[name=use]:checked').val());
 }
 btnSearch.click(function(e){
 	var id = searchBar.val();
