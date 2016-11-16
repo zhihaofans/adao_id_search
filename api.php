@@ -7,7 +7,9 @@ if (empty($_GET['id'])||empty($_GET['page'])) {
 }
 set_time_limit(0);
 $query_url = 'https://www.so.com/s?q=site:h.nimingban.com+'.$id;
-$re = '|<cite>h.nimingban.com/t/(\d+)\S*</cite>|';
+$re1 = '|<cite>h.nimingban.com(?:/m)?/t/(\d+)\S*?</cite>|';
+$re2 = '|<cite.*?h.nimingban.com\S*?</cite>|';
+
 /* 函数定义开始 */
 function getHTTPS($url) {
 	$ch = curl_init();
@@ -21,21 +23,24 @@ function getHTTPS($url) {
 	curl_close($ch);
 	return $result;
 }
-function getPage ($page, $query_url, $re) {
+function getPage ($page, $query_url, $re1, $re2) {
 	$url = $query_url.'&pn='.$page;
 	$html = getHTTPS($url);
 	$result = array();
-	preg_match_all($re, $html, $result);
-	return count($result[1])===0?false:$result[1];
+	preg_match_all($re1, $html, $result);
+	if (preg_match($re2, $html)===0) {
+		return false;
+	}
+	return $result[1];
 }
 /* 函数定义结束 */
 
 //开始搜索
-$result = getPage($page, $query_url, $re);
-if (is_array($result)) {
+$result = getPage($page, $query_url, $re1, $re2);
+if ($result===false) {
+	echo 'null';
+} else {
 	$result = array_unique($result);
 	$result = array_values($result);
 	echo json_encode($result);
-} else {
-	echo '[]';
 }

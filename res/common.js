@@ -28,7 +28,7 @@ function getPage (id, page, use) {
 		url: url,
 		dataType: 'json'
 	}).success(function(data){
-		if (data.length===0) {
+		if (data===null) {
 			caption.text('搜索到 ' + all.length + ' 条记录，点击串号跳转。');
 			searchBar.prop('disabled', false);
 			btnSearch.removeClass('disabled');
