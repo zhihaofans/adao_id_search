@@ -6,7 +6,7 @@ if (empty($_GET['id'])||empty($_GET['page'])) {
 	$page = (int)$_GET['page'];
 }
 set_time_limit(0);
-$query_url = 'https://www.so.com/s?q=site:h.nimingban.com+inurl:/t/+'.$id;
+$query_url = 'https://www.so.com/s?q=site:h.nimingban.com+'.$id;
 $re1 = '|<cite.*?h.nimingban.com/\S+?/(\d+)\S*?</cite>|';
 $re2 = '|<cite.*?h.nimingban.com\S*?</cite>|';
 
