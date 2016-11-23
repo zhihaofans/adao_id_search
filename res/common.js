@@ -1,10 +1,11 @@
 var
+    web_version='v0.4',
 	all = [],
 	btnSearch = $('.btn-search'),
 	searchBar = $('.search-bar input[type=text]'),
 	caption = $('.table-result>caption'),
 	tbody = $('.table-result>tbody'),
-    search_server=[{"name":"360","url":"api.php"},{"name":"google","url":"api_g.php"}];
+    search_server=[{"name":"360","url":"api_360.php"},{"name":"google","url":"api_g.php"}];
 function mergeSort (arr1,arr2){
 	var arr = arr1.slice();
 	for(var i=0;i<arr2.length;i++){
@@ -68,7 +69,7 @@ function getPage (id, page, use) {
 	caption.text(use+':正在搜索第' + page + '页记录...');
 	switch(use){
 		case '360':
-			var url = 'api.php?id=' + id + '&page=' + page;
+			var url = 'api_360.php?id=' + id + '&page=' + page;
 			break;
 		case 'google':
 			var url = 'api_g.php?id=' + id + '&page=' + page;
@@ -104,6 +105,7 @@ function getPage (id, page, use) {
 	});
 }
 function start (id) {
+    $('title').html('A岛饼干侦探 '+web_version);
 	all = [];
 	searchBar.prop('disabled', true);
 	btnSearch.addClass('disabled');

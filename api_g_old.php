@@ -13,6 +13,9 @@ $re2 = '|<cite.*?h.nimingban.com\S*?</cite>|';
 /* 函数定义开始 */
 function getHTTPS($url) {
 	$ch = curl_init();
+    // curl_setopt($ch,CURLOPT_PROXYTYPE,CURLPROXY_SOCKS5);//使用了SOCKS5代理   
+    // curl_setopt($ch, CURLOPT_HTTPPROXYTUNNEL, 1);//如果是HTTP代理
+    // curl_setopt($ch, CURLOPT_PROXY, "http://127.0.0.1:1080"); 
 	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 	curl_setopt($ch, CURLOPT_HEADER, false);
 	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
